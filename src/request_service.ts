@@ -16,12 +16,12 @@ export class RequestService {
     }
 
     accept(skypeAccount: any, userName: any) {
-        this.requestWithJar.put(Consts.SKYPEWEB_HTTPS + Consts.SKYPEWEB_API_SKYPE_HOST + '/users/self/contacts/auth-request/' + userName + '/accept', {
+        this.requestWithJar.put(Consts.SKYPEWEB_HTTPS + Consts.SKYPEWEB_CONTACTS_HOST + `/contacts/v2/users/${skypeAccount._selfInfo.username}/invites/${userName}/accept`, {
             headers: {
                 'X-Skypetoken': skypeAccount.skypeToken
             }
         }, (error: any, response: any, body: any) => {
-            if (!error && response.statusCode === 201) {
+            if (!error && response.statusCode === 200) {
                 return JSON.parse(body);
             } else {
                 this.eventEmitter.fire('error', 'Failed to accept friend.' + error + "/" + JSON.stringify(response));

@@ -8,6 +8,7 @@ import {EventEmitter} from "./utils";
 
 export class ContactsService {
     public contacts:Array<{}>;
+    public invite_contacts:Array<{}>;
     private requestWithJar: any;
     private eventEmitter: EventEmitter;
 
@@ -17,6 +18,7 @@ export class ContactsService {
     }
 
     public loadContacts(skypeAccount:SkypeAccount, resolve:(skypeAccount:SkypeAccount, contacts:Array<{}>)=>{}, reject: any):void {
+        
         this.requestWithJar.get(Consts.SKYPEWEB_HTTPS + Consts.SKYPEWEB_CONTACTS_HOST + '/contacts/v1/users/' + skypeAccount.selfInfo.username + '/contacts', {
             headers: {
                 'X-Skypetoken': skypeAccount.skypeToken
@@ -24,6 +26,19 @@ export class ContactsService {
         }, (error:any, response:http.IncomingMessage, body:any) => {
             if (!error && response.statusCode === 200) {
                 this.contacts = JSON.parse(body).contacts;
+                resolve(skypeAccount, this.contacts);
+            } else {
+                this.eventEmitter.fire('error', 'Failed to load contacts.');
+            }
+        });
+
+        this.requestWithJar.get(Consts.SKYPEWEB_HTTPS + Consts.SKYPEWEB_CONTACTS_HOST + `/contacts/v2/users/${skypeAccount.selfInfo.username}/invites/`, {
+            headers: {
+                'X-Skypetoken': skypeAccount.skypeToken
+            }
+        }, (error:any, response:http.IncomingMessage, body:any) => {
+            if (!error && response.statusCode === 200) {
+                this.invite_contacts = JSON.parse(body).invite_list;
                 resolve(skypeAccount, this.contacts);
             } else {
                 this.eventEmitter.fire('error', 'Failed to load contacts.');
