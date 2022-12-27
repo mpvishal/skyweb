@@ -5,6 +5,7 @@ import Utils from './utils';
 import * as http from 'http';
 import {CookieJar} from "request";
 import {EventEmitter} from "./utils";
+import { Promise } from "es6-promise";
 
 export class RequestService {
     private requestWithJar: any;
@@ -15,18 +16,22 @@ export class RequestService {
         this.eventEmitter = eventEmitter;
     }
 
-    loadAllPendingContacts(skypeAccount: any) {
-        this.requestWithJar.get(Consts.SKYPEWEB_HTTPS + Consts.SKYPEWEB_CONTACTS_HOST + `/contacts/v2/users/${skypeAccount.selfInfo.username}/invites/`, {
-            headers: {
-                'X-Skypetoken': skypeAccount.skypeToken
-            }
-        }, (error: any, response: any, body: any) => {
-            if (!error && response.statusCode === 200) {
-                return body ? JSON.parse(body) : {message: "success", result: true};
-            } else {
-                this.eventEmitter.fire('error', 'Failed to accept friend.' + error + "/" + JSON.stringify(response));
-            }
-        });
+    loadAllPendingContacts(skypeAccount: any): Promise<{}>{
+        return new Promise((resolve, reject)=>{
+            this.requestWithJar.get(Consts.SKYPEWEB_HTTPS + Consts.SKYPEWEB_CONTACTS_HOST + `/contacts/v2/users/${skypeAccount.selfInfo.username}/invites/`, {
+                headers: {
+                    'X-Skypetoken': skypeAccount.skypeToken
+                }
+            }, (error: any, response: any, body: any) => {
+                if (!error && response.statusCode === 200) {
+                    resolve(JSON.parse(body));
+                } else {
+                    this.eventEmitter.fire('error', 'Failed to accept friend.' + error + "/" + JSON.stringify(response));
+                    reject(error)
+                }
+            });
+        })
+      
     }
 
     accept(skypeAccount: any, userName: any) {

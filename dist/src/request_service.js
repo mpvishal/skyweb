@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var request = require("request");
 var Consts = require("./consts");
+var es6_promise_1 = require("es6-promise");
 var RequestService = (function () {
     function RequestService(cookieJar, eventEmitter) {
         this.requestWithJar = request.defaults({ jar: cookieJar });
@@ -9,17 +10,20 @@ var RequestService = (function () {
     }
     RequestService.prototype.loadAllPendingContacts = function (skypeAccount) {
         var _this = this;
-        this.requestWithJar.get(Consts.SKYPEWEB_HTTPS + Consts.SKYPEWEB_CONTACTS_HOST + ("/contacts/v2/users/" + skypeAccount.selfInfo.username + "/invites/"), {
-            headers: {
-                'X-Skypetoken': skypeAccount.skypeToken
-            }
-        }, function (error, response, body) {
-            if (!error && response.statusCode === 200) {
-                return body ? JSON.parse(body) : { message: "success", result: true };
-            }
-            else {
-                _this.eventEmitter.fire('error', 'Failed to accept friend.' + error + "/" + JSON.stringify(response));
-            }
+        return new es6_promise_1.Promise(function (resolve, reject) {
+            _this.requestWithJar.get(Consts.SKYPEWEB_HTTPS + Consts.SKYPEWEB_CONTACTS_HOST + ("/contacts/v2/users/" + skypeAccount.selfInfo.username + "/invites/"), {
+                headers: {
+                    'X-Skypetoken': skypeAccount.skypeToken
+                }
+            }, function (error, response, body) {
+                if (!error && response.statusCode === 200) {
+                    resolve(JSON.parse(body));
+                }
+                else {
+                    _this.eventEmitter.fire('error', 'Failed to accept friend.' + error + "/" + JSON.stringify(response));
+                    reject(error);
+                }
+            });
         });
     };
     RequestService.prototype.accept = function (skypeAccount, userName) {

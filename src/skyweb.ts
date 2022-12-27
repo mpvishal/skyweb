@@ -68,8 +68,8 @@ export default class Skyweb {
         return this.requestService.accept(this.skypeAccount, username);
     }
 
-    getAllPendingRequest() {
-        return this.requestService.loadAllPendingContacts(this.skypeAccount);
+    getAllPendingRequest(): Promise<{}>  {
+        return this.requestService.loadAllPendingContacts(this.skypeAccount);      
     }
 
     declineAuthRequest(username: any) {
