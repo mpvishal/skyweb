@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Login = void 0;
 var request = require("request");
 var cheerio = require("cheerio");
 var utils_1 = require("./utils");

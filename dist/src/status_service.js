@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.StatusService = void 0;
 var request = require("request");
 var Consts = require("./consts");
 var StatusService = (function () {

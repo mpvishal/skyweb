@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RequestService = void 0;
 var request = require("request");
 var Consts = require("./consts");
 var RequestService = (function () {
@@ -10,12 +9,12 @@ var RequestService = (function () {
     }
     RequestService.prototype.accept = function (skypeAccount, userName) {
         var _this = this;
-        this.requestWithJar.put(Consts.SKYPEWEB_HTTPS + Consts.SKYPEWEB_API_SKYPE_HOST + '/users/self/contacts/auth-request/' + userName + '/accept', {
+        this.requestWithJar.put(Consts.SKYPEWEB_HTTPS + Consts.SKYPEWEB_CONTACTS_HOST + ("/contacts/v2/users/" + skypeAccount._selfInfo.username + "/invites/" + userName + "/accept"), {
             headers: {
                 'X-Skypetoken': skypeAccount.skypeToken
             }
         }, function (error, response, body) {
-            if (!error && response.statusCode === 201) {
+            if (!error && response.statusCode === 200) {
                 return JSON.parse(body);
             }
             else {

@@ -3,6 +3,7 @@ import { CookieJar } from "request";
 import { EventEmitter } from "./utils";
 export declare class ContactsService {
     contacts: Array<{}>;
+    invite_contacts: Array<{}>;
     private requestWithJar;
     private eventEmitter;
     constructor(cookieJar: CookieJar, eventEmitter: EventEmitter);
