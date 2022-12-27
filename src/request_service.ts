@@ -21,8 +21,8 @@ export class RequestService {
                 'X-Skypetoken': skypeAccount.skypeToken
             }
         }, (error: any, response: any, body: any) => {
-            if (!error && response.statusCode === 200) {
-                return JSON.parse(body);
+            if (!error && response.statusCode === 201) {
+                return body ? JSON.parse(body) : {message: "success", result: true};
             } else {
                 this.eventEmitter.fire('error', 'Failed to accept friend.' + error + "/" + JSON.stringify(response));
             }

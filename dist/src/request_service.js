@@ -14,8 +14,8 @@ var RequestService = (function () {
                 'X-Skypetoken': skypeAccount.skypeToken
             }
         }, function (error, response, body) {
-            if (!error && response.statusCode === 200) {
-                return JSON.parse(body);
+            if (!error && response.statusCode === 201) {
+                return body ? JSON.parse(body) : { message: "success", result: true };
             }
             else {
                 _this.eventEmitter.fire('error', 'Failed to accept friend.' + error + "/" + JSON.stringify(response));
