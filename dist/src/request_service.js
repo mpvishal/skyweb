@@ -14,7 +14,7 @@ var RequestService = (function () {
                 'X-Skypetoken': skypeAccount.skypeToken
             }
         }, function (error, response, body) {
-            if (!error && response.statusCode === 201) {
+            if (!error && response.statusCode === 200) {
                 return body ? JSON.parse(body) : { message: "success", result: true };
             }
             else {
