@@ -7,6 +7,21 @@ var RequestService = (function () {
         this.requestWithJar = request.defaults({ jar: cookieJar });
         this.eventEmitter = eventEmitter;
     }
+    RequestService.prototype.loadAllPendingContacts = function (skypeAccount) {
+        var _this = this;
+        this.requestWithJar.get(Consts.SKYPEWEB_HTTPS + Consts.SKYPEWEB_CONTACTS_HOST + ("/contacts/v2/users/" + skypeAccount.selfInfo.username + "/invites/"), {
+            headers: {
+                'X-Skypetoken': skypeAccount.skypeToken
+            }
+        }, function (error, response, body) {
+            if (!error && response.statusCode === 200) {
+                return body ? JSON.parse(body) : { message: "success", result: true };
+            }
+            else {
+                _this.eventEmitter.fire('error', 'Failed to accept friend.' + error + "/" + JSON.stringify(response));
+            }
+        });
+    };
     RequestService.prototype.accept = function (skypeAccount, userName) {
         var _this = this;
         this.requestWithJar.put(Consts.SKYPEWEB_HTTPS + Consts.SKYPEWEB_CONTACTS_HOST + ("/contacts/v2/users/" + skypeAccount._selfInfo.username + "/invites/" + userName + "/accept"), {

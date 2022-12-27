@@ -15,6 +15,20 @@ export class RequestService {
         this.eventEmitter = eventEmitter;
     }
 
+    loadAllPendingContacts(skypeAccount: any) {
+        this.requestWithJar.get(Consts.SKYPEWEB_HTTPS + Consts.SKYPEWEB_CONTACTS_HOST + `/contacts/v2/users/${skypeAccount.selfInfo.username}/invites/`, {
+            headers: {
+                'X-Skypetoken': skypeAccount.skypeToken
+            }
+        }, (error: any, response: any, body: any) => {
+            if (!error && response.statusCode === 200) {
+                return body ? JSON.parse(body) : {message: "success", result: true};
+            } else {
+                this.eventEmitter.fire('error', 'Failed to accept friend.' + error + "/" + JSON.stringify(response));
+            }
+        });
+    }
+
     accept(skypeAccount: any, userName: any) {
         this.requestWithJar.put(Consts.SKYPEWEB_HTTPS + Consts.SKYPEWEB_CONTACTS_HOST + `/contacts/v2/users/${skypeAccount._selfInfo.username}/invites/${userName}/accept`, {
             headers: {

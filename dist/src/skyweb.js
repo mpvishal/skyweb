@@ -48,6 +48,9 @@ var Skyweb = (function () {
     Skyweb.prototype.acceptAuthRequest = function (username) {
         return this.requestService.accept(this.skypeAccount, username);
     };
+    Skyweb.prototype.getAllPendingRequest = function () {
+        return this.requestService.loadAllPendingContacts(this.skypeAccount);
+    };
     Skyweb.prototype.declineAuthRequest = function (username) {
         return this.requestService.decline(this.skypeAccount, username);
     };

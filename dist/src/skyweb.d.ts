@@ -20,6 +20,7 @@ export default class Skyweb {
     setTopic(conversationId: string, message: string): void;
     setStatus(status: Status): void;
     acceptAuthRequest(username: any): void;
+    getAllPendingRequest(): void;
     declineAuthRequest(username: any): void;
     createThread(members: Member[]): Promise<string>;
     on(eventName: string, listener: (eventName: string, content: any) => void): void;
