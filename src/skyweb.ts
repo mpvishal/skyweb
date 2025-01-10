@@ -64,6 +64,10 @@ export default class Skyweb {
         this.statusService.setStatus(this.skypeAccount, status);
     }
 
+    reloadContacts() {
+        return new Promise(this.contactsService.loadContacts.bind(this.contactsService, this.skypeAccount));
+    }
+
     acceptAuthRequest(username: any) {
         return this.requestService.accept(this.skypeAccount, username);
     }

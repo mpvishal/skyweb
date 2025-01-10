@@ -45,6 +45,9 @@ var Skyweb = (function () {
     Skyweb.prototype.setStatus = function (status) {
         this.statusService.setStatus(this.skypeAccount, status);
     };
+    Skyweb.prototype.reloadContacts = function () {
+        return new es6_promise_1.Promise(this.contactsService.loadContacts.bind(this.contactsService, this.skypeAccount));
+    };
     Skyweb.prototype.acceptAuthRequest = function (username) {
         return this.requestService.accept(this.skypeAccount, username);
     };

@@ -19,6 +19,7 @@ export default class Skyweb {
     sendMessage(conversationId: string, message: string, messagetype?: string, contenttype?: string): void;
     setTopic(conversationId: string, message: string): void;
     setStatus(status: Status): void;
+    reloadContacts(): Promise<unknown>;
     acceptAuthRequest(username: any): void;
     getAllPendingRequest(): Promise<{}>;
     declineAuthRequest(username: any): void;
